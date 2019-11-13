@@ -28,16 +28,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     EditText editTextEmail, editTextPass;
     ProgressBar progressSpinner;
 
-    public class Item{
-        public String name;
-
-        public Item(String name){
-            this.name = name;
-        }
-
-
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
