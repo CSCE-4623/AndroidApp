@@ -133,7 +133,7 @@ public class HomeActivity extends AppCompatActivity
 
                     @NonNull
                     @Override
-                    //populate products
+                    //populate products..
                     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
                     {
                         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_items_layout, parent, false);
