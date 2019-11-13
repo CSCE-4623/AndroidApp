@@ -27,8 +27,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     FirebaseAuth mAuth;
     EditText editTextEmail, editTextPass;
     ProgressBar progressSpinner;
-    private DatabaseReference mDatabase;
-
 
     public class Item{
         public String name;
@@ -46,8 +44,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("items");
 
         editTextEmail = findViewById(R.id.email_input);
         editTextPass = findViewById(R.id.password_input);
@@ -104,22 +100,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
             }
         });
-
-    mDatabase.addValueEventListener(new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            Item item = dataSnapshot.getValue(Item.class);
-            System.out.println(item);
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
-            System.out.println("THE READ FAILED ON BUTTON CLICK: " + databaseError.getCode());
-        }
-    });
-
-
-
     }
 
     @Override
