@@ -8,11 +8,9 @@ import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
-<<<<<<< HEAD
 
 import com.mobile.finalproject.HomeActivity;
 import com.mobile.finalproject.Prevalent.Prevalent;
-=======
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -25,7 +23,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
->>>>>>> 3fae5415a22016209f95d170a55865e9033cefaf
 import com.mobile.finalproject.R;
 import com.mobile.finalproject.model.Users;
 
@@ -53,9 +50,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         findViewById(R.id.btn_register).setOnClickListener(this);
         findViewById(R.id.btn_login).setOnClickListener(this);
-<<<<<<< HEAD
         userEditText = (EditText)findViewById(R.id.email_input);
-=======
     }
 
     private void userLogin() {
@@ -104,7 +99,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
             }
         });
->>>>>>> 3fae5415a22016209f95d170a55865e9033cefaf
     }
 
     @Override
@@ -114,17 +108,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.btn_register:
                 startActivity(new Intent(this, RegisterActivity.class));
                 break;
-<<<<<<< HEAD
             case R.id.btn_login:
                 Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                 String userName = userEditText.getText().toString();
               //  Prevalent.currentOnlineUser.setName(userName);
                 startActivity(intent);
-=======
-
-            case R.id.btn_login:
                 userLogin();
->>>>>>> 3fae5415a22016209f95d170a55865e9033cefaf
                 break;
         }
     }
