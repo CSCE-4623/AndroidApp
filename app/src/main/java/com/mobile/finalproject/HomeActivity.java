@@ -2,13 +2,6 @@ package com.mobile.finalproject;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-/*import android.support.annotation.NonNull;
-import android.support.v4.view.GravityCompat;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;*/
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,14 +26,20 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.mobile.finalproject.model.Products;
 import com.mobile.finalproject.view.LoginActivity;
 import com.mobile.finalproject.view.SettingsActivity;
+import com.mobile.finalproject.viewHolder.ProductViewHolder;
+import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.paperdb.Paper;
-import  com.mobile.finalproject.model.Products;
-import com.mobile.finalproject.viewHolder.ProductViewHolder;
-import com.squareup.picasso.Picasso;
+
+/*import android.support.annotation.NonNull;
+import android.support.v4.view.GravityCompat;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;*/
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
