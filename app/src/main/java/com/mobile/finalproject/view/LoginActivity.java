@@ -89,9 +89,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 progressSpinner.setVisibility(View.GONE);
                 if(task.isSuccessful()){
                     //NAVIGATE TO NEW ACTIVITY
-                    //Intent intent = new Intent(LoginActivity.this, OtherActivity.class);
-                    //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    //startActivity(intent);
+                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                   // String userName = userEditText.getText().toString();
+                    //  Prevalent.currentOnlineUser.setName(userName);
+                    startActivity(intent);
                     System.out.println("AYYYYY IT WAS SUCCESSFULLY LOGGED IN");
                 }
                 else{
@@ -109,10 +111,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(new Intent(this, RegisterActivity.class));
                 break;
             case R.id.btn_login:
-                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                String userName = userEditText.getText().toString();
-              //  Prevalent.currentOnlineUser.setName(userName);
-                startActivity(intent);
                 userLogin();
                 break;
         }
