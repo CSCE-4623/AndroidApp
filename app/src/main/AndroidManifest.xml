@@ -14,6 +14,7 @@
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".view.RegisterActivity" />
+        <activity android:name=".view.CartActivity" />
         <activity android:name=".view.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

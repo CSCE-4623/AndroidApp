@@ -100,4 +100,10 @@ public class Products {
     public void setReservationEnd(String reservationEnd) {
         this.reservationEnd = reservationEnd;
     }
+
+    public String getJsonObject(){
+        return "{ItemId:"+itemID+",name"+name+",price:"+price+",quantity:"+quantity+",Category:"+Category+
+                ",description:"+description+",fileLocation:"+fileLocation+
+                ",reservationStart:"+reservationStart+",reservationEnd:"+reservationEnd+"}";
+    }
 }
