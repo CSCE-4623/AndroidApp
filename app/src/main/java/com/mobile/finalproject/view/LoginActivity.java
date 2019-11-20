@@ -1,16 +1,14 @@
 package com.mobile.finalproject.view;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.mobile.finalproject.HomeActivity;
-import com.mobile.finalproject.Prevalent.Prevalent;
 import com.mobile.finalproject.R;
-import com.mobile.finalproject.model.Users;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -40,6 +38,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 String userName = userEditText.getText().toString();
               //  Prevalent.currentOnlineUser.setName(userName);
                 startActivity(intent);
+                //dd
                 break;
         }
     }
