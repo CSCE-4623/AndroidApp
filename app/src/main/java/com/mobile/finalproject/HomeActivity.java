@@ -49,7 +49,7 @@ public class HomeActivity extends AppCompatActivity
     private RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
 
-
+    public static final String ITEM_ID = "id";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,7 +120,7 @@ public class HomeActivity extends AppCompatActivity
         FirebaseRecyclerAdapter<Products, ProductViewHolder> adapter =
                 new FirebaseRecyclerAdapter<Products, ProductViewHolder>(options) {
                     @Override
-                    protected void onBindViewHolder(@NonNull ProductViewHolder holder, int position, @NonNull Products model)
+                    protected void onBindViewHolder(@NonNull ProductViewHolder holder, int position, @NonNull final Products model)
                     {
                         //display data
                         holder.txtProductName.setText(model.getName());
@@ -129,6 +129,15 @@ public class HomeActivity extends AppCompatActivity
                         Picasso.get().load(model.getFileLocation()).into(holder.imageView);
                         Log.i("HomeActivity", "Output: " + model.getName() + "  "  + model.getDescription() +
                                 "  " + "Price/hr = " + model.getPrice() + "$");
+                        holder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(HomeActivity.this, ProductDetailsActivity.class);
+                                String getId =  String.valueOf(model.getItemID());
+                                intent.putExtra(ITEM_ID, getId );
+                                startActivity(intent);
+                            }
+                        });
                     }
 
                     @NonNull
