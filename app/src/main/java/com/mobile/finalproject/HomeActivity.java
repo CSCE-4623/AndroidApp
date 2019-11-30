@@ -2,13 +2,6 @@ package com.mobile.finalproject;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-/*import android.support.annotation.NonNull;
-import android.support.v4.view.GravityCompat;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;*/
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,21 +23,28 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.mobile.finalproject.model.Products;
+import com.mobile.finalproject.view.CartActivity;
 import com.mobile.finalproject.view.LoginActivity;
 import com.mobile.finalproject.view.SettingsActivity;
+import com.mobile.finalproject.viewHolder.ProductViewHolder;
+import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.paperdb.Paper;
-import  com.mobile.finalproject.model.Products;
-import com.mobile.finalproject.viewHolder.ProductViewHolder;
-import com.squareup.picasso.Picasso;
+
+/*import android.support.annotation.NonNull;
+import android.support.v4.view.GravityCompat;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;*/
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
 {
+
     private DatabaseReference ProductsRef;
     private RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
@@ -71,8 +71,10 @@ public class HomeActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+
+                Intent intent = new Intent(HomeActivity.this, CartActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -93,7 +95,8 @@ public class HomeActivity extends AppCompatActivity
         CircleImageView profileImageView = headerView.findViewById(R.id.user_profile_image);
 
 
-      /*  userNameTextView.setText(Prevalent.currentOnlineUser.getName());
+      /*
+        userNameTextView.setText(Prevalent.currentOnlineUser.getName());
         Picasso.get().load(Prevalent.currentOnlineUser.getFileLocation()).placeholder(R.drawable.profile).into(profileImageView);
 */
 
@@ -199,6 +202,8 @@ public class HomeActivity extends AppCompatActivity
 
         if (id == R.id.nav_cart)
         {
+            Intent intent = new Intent(HomeActivity.this, CartActivity.class);
+            startActivity(intent);
 
         }
         else if (id == R.id.nav_orders)

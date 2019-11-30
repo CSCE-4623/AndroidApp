@@ -1,5 +1,6 @@
 package com.mobile.finalproject.view;
 
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,7 +10,10 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.mobile.finalproject.HomeActivity;
+
 import com.mobile.finalproject.Prevalent.Prevalent;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -24,7 +28,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.finalproject.R;
-import com.mobile.finalproject.model.Users;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
