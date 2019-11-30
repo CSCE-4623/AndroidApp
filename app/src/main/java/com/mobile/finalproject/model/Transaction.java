@@ -1,14 +1,15 @@
 package com.mobile.finalproject.model;
 
 public class Transaction {
-    private String itemID, pname, price, transactionQty, subTotal;
+    private String pname;
+    private Long itemID, price, transactionQty, subTotal;
 
 
 
     public Transaction() {
     }
 
-    public Transaction(String pid, String pname, String price, String quantity, String subTotal) {
+    public Transaction(Long pid, String pname, Long price, Long quantity, Long subTotal) {
         this.itemID = pid;
         this.pname = pname;
         this.price = price;
@@ -16,11 +17,11 @@ public class Transaction {
         this.subTotal = subTotal;
     }
 
-    public String getItemID() {
+    public Long getItemID() {
         return itemID;
     }
 
-    public void setItemID(String itemID) {
+    public void setItemID(Long itemID) {
         this.itemID = itemID;
     }
 
@@ -32,27 +33,27 @@ public class Transaction {
         this.pname = pname;
     }
 
-    public String getPrice() {
+    public Long getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Long price) {
         this.price = price;
     }
 
-    public String getTransactionQty() {
+    public Long getTransactionQty() {
         return transactionQty;
     }
 
-    public void setTransactionQty(String quantity) {
+    public void setTransactionQty(Long quantity) {
         this.transactionQty = quantity;
     }
 
-    public String getSubTotal() {
+    public Long getSubTotal() {
         return subTotal;
     }
 
-    public void setSubTotal(String sutTotal) {
+    public void setSubTotal(Long sutTotal) {
         this.subTotal = sutTotal;
     }
 }

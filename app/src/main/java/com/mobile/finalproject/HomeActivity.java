@@ -95,7 +95,8 @@ public class HomeActivity extends AppCompatActivity
         CircleImageView profileImageView = headerView.findViewById(R.id.user_profile_image);
 
 
-      /*  userNameTextView.setText(Prevalent.currentOnlineUser.getName());
+      /*
+        userNameTextView.setText(Prevalent.currentOnlineUser.getName());
         Picasso.get().load(Prevalent.currentOnlineUser.getFileLocation()).placeholder(R.drawable.profile).into(profileImageView);
 */
 

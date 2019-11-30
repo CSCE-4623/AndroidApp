@@ -6,16 +6,26 @@
     android:layout_height="match_parent"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
+    android:background="@android:color/darker_gray"
     tools:context=".view.LoginActivity">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="125dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="75dp"
+        android:src="@drawable/logo" />
 
     <EditText
         android:id="@+id/email_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="225dp"
+        android:autofillHints=""
+        android:backgroundTint="@android:color/primary_text_light"
+        android:fontFamily="sans-serif-condensed-medium"
         android:hint="@string/email"
-        android:inputType="textEmailAddress"
-        android:autofillHints="" />
+        android:inputType="textEmailAddress" />
 
     <EditText
         android:id="@+id/password_input"
@@ -23,9 +33,11 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/email_input"
         android:layout_marginTop="65dp"
+        android:autofillHints=""
+        android:fontFamily="sans-serif-condensed-medium"
         android:hint="@string/password"
         android:inputType="textPassword"
-        android:autofillHints="" />
+        android:backgroundTint="@android:color/primary_text_light"/>
 
     <Button
         android:id="@+id/btn_login"
@@ -33,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/password_input"
         android:layout_marginBottom="-95dp"
-        android:fontFamily="sans-serif-smallcaps"
+        android:fontFamily="sans-serif-medium"
         android:text="@string/login" />
 
     <Button
@@ -42,8 +54,16 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/btn_login"
         android:layout_marginBottom="-65dp"
-        android:fontFamily="sans-serif-smallcaps"
+        android:fontFamily="sans-serif-condensed-medium"
         android:text="@string/register" />
 
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:indeterminateTint="@android:color/white"/>
 
 </RelativeLayout>
