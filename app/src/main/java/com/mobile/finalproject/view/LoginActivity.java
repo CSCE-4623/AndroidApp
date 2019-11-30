@@ -113,7 +113,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 String userName = userEditText.getText().toString();
               //  Prevalent.currentOnlineUser.setName(userName);
                 startActivity(intent);
-                userLogin();
+                userLogin();//keep here
                 break;
         }
     }

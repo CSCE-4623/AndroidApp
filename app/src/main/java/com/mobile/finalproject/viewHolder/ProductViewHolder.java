@@ -1,5 +1,6 @@
 package com.mobile.finalproject.viewHolder;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -27,6 +28,7 @@ public class ProductViewHolder  extends RecyclerView.ViewHolder implements View.
 
         Log.i("ProductViewHolder", "Output: " + txtProductName + "  "  + txtProductDescription +
                 "  " + "Price/hr = " + txtProductPrice + "$");
+        
     }
 
     public void setItemClickListener(ItemClickListener listener){
