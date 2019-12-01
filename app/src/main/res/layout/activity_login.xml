@@ -45,8 +45,10 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/password_input"
         android:layout_marginBottom="-95dp"
+        android:backgroundTint="@android:color/holo_red_dark"
         android:fontFamily="sans-serif-medium"
-        android:text="@string/login" />
+        android:text="@string/login"
+        android:textColor="@color/colorText" />
 
     <Button
         android:id="@+id/btn_register"
@@ -54,8 +56,10 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/btn_login"
         android:layout_marginBottom="-65dp"
+        android:backgroundTint="@android:color/holo_red_dark"
         android:fontFamily="sans-serif-condensed-medium"
-        android:text="@string/register" />
+        android:text="@string/register"
+        android:textColor="@color/colorText" />
 
     <ProgressBar
         android:visibility="gone"

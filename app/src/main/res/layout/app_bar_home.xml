@@ -26,6 +26,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
+        android:tint="@color/colorText"
+        app:backgroundTint="@android:color/holo_red_dark"
         app:srcCompat="@drawable/nav_cart" />
 
     <include layout="@layout/content_home" />

@@ -17,6 +17,19 @@
         android:layout_marginRight="15dp"
         />
 
+    <Button
+        android:id="@+id/add_to_cart_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/product_description_details"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:backgroundTint="@android:color/holo_red_dark"
+        android:fontFamily="@font/abeezee"
+        android:text="Add To Cart"
+        android:textColor="@color/colorText" />
+
     <TextView
         android:id="@+id/product_name_details"
         android:layout_width="match_parent"
@@ -83,24 +96,27 @@
         android:layout_marginStart="305dp"
         android:layout_marginLeft="305dp"
         android:layout_marginTop="15dp"
-        android:layout_marginEnd="5dp"
+        android:layout_marginEnd="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginBottom="15dp"
         android:elevation="6dp"
+        app:backGroundColor="@android:color/holo_red_dark"
         app:initialNumber="1"
         app:textSize="5sp"></com.cepheuen.elegantnumberbutton.view.ElegantNumberButton>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/add_product_to_cart_btn"
+        android:id="@+id/cart_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="15dp"
         android:layout_marginLeft="15dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp"
         android:layout_marginRight="15dp"
-        android:backgroundTint="@android:color/white"
+        android:layout_marginBottom="15dp"
+        android:backgroundTint="@android:color/holo_red_dark"
         android:elevation="6dp"
-        android:src="@drawable/nav_cart" />
+        android:src="@drawable/nav_cart"
+        android:tint="@color/colorText"
+        app:rippleColor="@color/colorText" />
 </RelativeLayout>

@@ -152,7 +152,8 @@
         android:onClick="insertOrder"
         android:text="Place Order"
         android:textColor="@android:color/white"
-        android:theme="@style/Theme.MaterialButton">
+        android:theme="@style/Theme.MaterialButton"
+        android:backgroundTint="@android:color/holo_red_dark">
     </Button>
 
 </RelativeLayout>
