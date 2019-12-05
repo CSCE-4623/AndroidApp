@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ConfirmationActivity">
+    tools:context=".MapsActivity">
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -15,12 +15,23 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:context=".MapsActivity" />
 
-    <TextView
-        android:layout_width="match_parent"
+    <TextView android:id="@+id/confirmMessage"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="500dp"
+    android:text="Thank you for renting an item.\nPlease pick up your item at this location"
+    android:textSize="24sp"
+    app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/logoutButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="500dp"
-        android:text="Thank you for selecting an item. Please pick up your item at this location"
-        android:textSize="24sp"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="Log Out"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/confirmMessage"
+        android:layout_marginTop="50dp"
+        android:onClick="logout"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

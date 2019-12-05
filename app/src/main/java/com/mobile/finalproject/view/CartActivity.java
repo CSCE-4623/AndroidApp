@@ -24,6 +24,7 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.mobile.finalproject.MapsActivity;
 import com.mobile.finalproject.R;
 import com.mobile.finalproject.model.Transaction;
 import com.mobile.finalproject.viewHolder.CartViewHolder;
@@ -248,5 +249,11 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    // USING THIS METHOD TO TEST TRANSITION TO CONFIRM SCREEN FOR NOW - KEVIN
+    public void insertOrder(View view){
+        Intent intent = new Intent(this, MapsActivity.class);
+        startActivity(intent);
     }
 }
