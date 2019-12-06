@@ -128,7 +128,7 @@ public class HomeActivity extends AppCompatActivity
                         //display data
                         holder.txtProductName.setText(model.getName());
                         holder.txtProductDescription.setText(model.getDescription());
-                        holder.txtProductPrice.setText("Price/hr = " + model.getPrice() + "$");
+                        holder.txtProductPrice.setText("$ " + model.getPrice()  + "/day");
                         Picasso.get().load(model.getFileLocation()).into(holder.imageView);
                         Log.i("HomeActivity", "Output: " + model.getName() + "  "  + model.getDescription() +
                                 "  " + "Price/hr = " + model.getPrice() + "$");

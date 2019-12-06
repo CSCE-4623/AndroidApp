@@ -29,6 +29,8 @@ import com.mobile.finalproject.R;
 import com.mobile.finalproject.model.Transaction;
 import com.mobile.finalproject.viewHolder.CartViewHolder;
 
+import java.text.DecimalFormat;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.paperdb.Paper;
 
@@ -46,6 +48,7 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
     private DatabaseReference cartListRef;
     Transaction transaction;
     public Double taxes = 0.0 ,subTotal = 0.0 , grandTotal = 0.0;
+    private static DecimalFormat roundTotal = new DecimalFormat("0.00");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +102,7 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
                 Log.i("Debug", "Transaction Name: " +transaction.getPname());
 
                 cartViewHolder.txtProductName.setText(transaction.getPname());
-                cartViewHolder.txtProductSubTotal.setText(String.valueOf(transaction.getSubTotal()) + " $");
+                cartViewHolder.txtProductSubTotal.setText("$ " + String.valueOf(transaction.getSubTotal()) );
                 cartViewHolder.txtProductQuantity.setText(String.valueOf(transaction.getTransactionQty()));
 
 
@@ -108,7 +111,8 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
                 cartViewHolder.txtProductName.setText("Name");
                 cartViewHolder.txtProductSubTotal.setText("0.0" + " $");
                 cartViewHolder.txtProductQuantity.setText("0 units");*/
-                taxes = subTotal* 9.75;
+                taxes = subTotal* 0.0975;
+                taxes = Double.valueOf(roundTotal.format(taxes));
                 grandTotal = subTotal + taxes;
                 txtSubTotal.setText(String.valueOf(subTotal));
                 txtTaxes.setText(String.valueOf(taxes));
