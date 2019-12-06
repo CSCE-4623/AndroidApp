@@ -1,15 +1,15 @@
 package com.mobile.finalproject.model;
 
 public class Transaction {
-    private String pname;
-    private Long itemID, price, transactionQty, subTotal;
+    private String pname, price;
+    private Long itemID,  transactionQty, subTotal;
 
 
 
     public Transaction() {
     }
 
-    public Transaction(Long pid, String pname, Long price, Long quantity, Long subTotal) {
+    public Transaction(Long pid, String pname, String price, Long quantity, Long subTotal) {
         this.itemID = pid;
         this.pname = pname;
         this.price = price;
@@ -33,11 +33,11 @@ public class Transaction {
         this.pname = pname;
     }
 
-    public Long getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(Long price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 

@@ -15,7 +15,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.mobile.finalproject.R;
 import com.mobile.finalproject.interfaces.ItemClickListener;
 import com.mobile.finalproject.model.Transaction;
-import com.mobile.finalproject.view.CartActivity;
 
 public class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -24,7 +23,7 @@ public class CartViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     private ItemClickListener itemClickListener;
     private CartViewHolder.ClickListener mClickListener;
     private DatabaseReference cartListRef;
-    CartActivity cartActivity;
+    public TextView txtTaxes,txtTotal, txtGrandTotal;
 
     //Interface to send callbacks...
     public interface ClickListener{
@@ -35,7 +34,7 @@ public class CartViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     {
         super(itemView);
 
-        cartListRef = FirebaseDatabase.getInstance().getReference().child("transaction");
+        cartListRef = FirebaseDatabase.getInstance().getReference().child("transaction").child("User View").child("items");
 
         txtProductName = itemView.findViewById(R.id.item_name);
         txtProductSubTotal = itemView.findViewById(R.id.item_subtotal);
@@ -43,6 +42,7 @@ public class CartViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         btnDeleteProductQty = itemView.findViewById(R.id.btn_deleteProduct);
         btnAddProductQty  = itemView.findViewById(R.id.btn_addProductQty);
         btnSubtractProductQty = itemView.findViewById(R.id.btn_subtractProductQty);
+
 
         itemView.setOnClickListener(new View.OnClickListener() {
             //  int position = getAdapterPosition();

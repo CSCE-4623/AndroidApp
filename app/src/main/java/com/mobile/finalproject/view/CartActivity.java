@@ -45,6 +45,7 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
     private TextView txtTaxes;
     private DatabaseReference cartListRef;
     Transaction transaction;
+    public Double taxes = 0.0 ,subTotal = 0.0 , grandTotal = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +83,7 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
 //        CheckOrderState();
 
 
-        cartListRef = FirebaseDatabase.getInstance().getReference().child("transaction");
+        cartListRef = FirebaseDatabase.getInstance().getReference().child("transaction").child("User View").child("items");
 
         FirebaseRecyclerOptions<Transaction> options =
                 new FirebaseRecyclerOptions.Builder<Transaction>()
@@ -100,10 +101,21 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
                 cartViewHolder.txtProductName.setText(transaction.getPname());
                 cartViewHolder.txtProductSubTotal.setText(String.valueOf(transaction.getSubTotal()) + " $");
                 cartViewHolder.txtProductQuantity.setText(String.valueOf(transaction.getTransactionQty()));
+
+
+                subTotal = subTotal +  transaction.getSubTotal();
 /*
                 cartViewHolder.txtProductName.setText("Name");
                 cartViewHolder.txtProductSubTotal.setText("0.0" + " $");
                 cartViewHolder.txtProductQuantity.setText("0 units");*/
+                taxes = subTotal* 9.75;
+                grandTotal = subTotal + taxes;
+                txtSubTotal.setText(String.valueOf(subTotal));
+                txtTaxes.setText(String.valueOf(taxes));
+                txtTotal.setText(String.valueOf(grandTotal));
+
+
+
             }
             @NonNull
             @Override
@@ -113,6 +125,12 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
                 return  holder;
             }
         };
+
+
+
+
+
+
 
         recycler_itemlist.setAdapter(adapter);
         adapter.startListening();
