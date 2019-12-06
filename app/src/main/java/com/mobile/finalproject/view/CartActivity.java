@@ -152,7 +152,7 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
 
     private void getIntentData(){
         if(getIntent()!=null && getIntent().getExtras()!=null){
-            // Get the Required Parameters for sending Order to server.
+            // Get the Required Parameters for sending Order to server..
         }
     }
 
