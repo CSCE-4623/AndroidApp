@@ -24,7 +24,6 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.mobile.finalproject.MapsActivity;
 import com.mobile.finalproject.R;
 import com.mobile.finalproject.model.Transaction;
 import com.mobile.finalproject.viewHolder.CartViewHolder;
@@ -44,6 +43,7 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
     private TextView txtSubTotal;
     private TextView txtTaxes;
     private DatabaseReference cartListRef;
+    Transaction transaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,8 +90,10 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
 
         FirebaseRecyclerAdapter<Transaction, CartViewHolder> adapter
                 = new FirebaseRecyclerAdapter<Transaction, CartViewHolder>(options) {
+            Transaction transaction_list;
             @Override
             protected void onBindViewHolder(@NonNull CartViewHolder cartViewHolder, int i, @NonNull Transaction transaction) {
+                transaction_list = transaction;
                 Log.i("Debug", "Transaction Name: " +transaction.getPname());
 
                 cartViewHolder.txtProductName.setText(transaction.getPname());
@@ -106,7 +108,7 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public CartViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_item_cart, parent, false);
-                CartViewHolder  holder = new CartViewHolder(view);
+                CartViewHolder  holder = new CartViewHolder(view, transaction_list);
                 return  holder;
             }
         };
@@ -249,11 +251,5 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    // USING THIS METHOD TO TEST TRANSITION TO CONFIRM SCREEN FOR NOW - KEVIN
-    public void insertOrder(View view){
-        Intent intent = new Intent(this, MapsActivity.class);
-        startActivity(intent);
     }
 }

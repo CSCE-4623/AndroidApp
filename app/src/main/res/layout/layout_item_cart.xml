@@ -40,11 +40,11 @@
                     android:textSize="18dp" />
 
                 <ImageButton
-                    android:id="@+id/btn_addProductQty"
+                    android:id="@+id/btn_subtractProductQty"
                     android:layout_width="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_height="wrap_content"
-                    card_view:srcCompat="@drawable/ic_plus" />
+                    card_view:srcCompat="@drawable/ic_minus" />
 
                 <TextView
                     android:id="@+id/item_quantity"
@@ -68,10 +68,10 @@
 <!--                    />-->
 
                 <ImageButton
-                    android:id="@+id/btn_subtractProductQty"
+                    android:id="@+id/btn_addProductQty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    card_view:srcCompat="@drawable/ic_minus"
+                    card_view:srcCompat="@drawable/ic_plus"
                     android:layout_gravity="center_vertical"/>
 
                 <TextView

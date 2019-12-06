@@ -1,6 +1,5 @@
 package com.mobile.finalproject.viewHolder;
 
-import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -37,6 +36,7 @@ public class ProductViewHolder  extends RecyclerView.ViewHolder implements View.
 
     @Override
     public void onClick(View view) {
+
         clickListener.onClick(view, getAdapterPosition(), false);
     }
 }

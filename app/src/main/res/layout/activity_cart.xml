@@ -36,17 +36,17 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.7"
         android:gravity="end"
-        android:text="Sub Total : "
+        android:text="Sub Total :  $"
         android:textSize="20dp">
 
     </TextView>
 
     <TextView
-        android:id="@+id/tv_taxes"
+        android:id="@+id/tv_subtotal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1.3"
-        android:text="0 $"
+        android:text="0"
         android:textSize="20dp">
 
     </TextView>
@@ -65,17 +65,17 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.7"
         android:gravity="end"
-        android:text="Taxes (9.75%): "
+        android:text="Taxes (9.75%):  $"
         android:textSize="20dp">
 
     </TextView>
 
     <TextView
-        android:id="@+id/tv_subtotal"
+        android:id="@+id/tv_taxes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1.3"
-        android:text="0 $"
+        android:text="0 "
         android:textSize="20dp">
 
     </TextView>
@@ -95,7 +95,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.7"
             android:gravity="end"
-            android:text="Total : "
+            android:text="Total:  $"
             android:textStyle="bold"
             android:textSize="20dp">
 
@@ -107,7 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1.3"
             android:textStyle="bold"
-            android:text="0 $"
+            android:text="0 "
             android:textSize="20dp">
 
         </TextView>
