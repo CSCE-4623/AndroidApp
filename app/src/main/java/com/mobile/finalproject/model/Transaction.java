@@ -56,4 +56,6 @@ public class Transaction {
     public void setSubTotal(Long sutTotal) {
         this.subTotal = sutTotal;
     }
+    public void addQty(){transactionQty++;}
+    public void subtractQty(){transactionQty--;}
 }

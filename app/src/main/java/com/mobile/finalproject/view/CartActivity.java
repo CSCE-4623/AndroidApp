@@ -22,8 +22,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mobile.finalproject.MapsActivity;
 import com.mobile.finalproject.R;
 import com.mobile.finalproject.model.Transaction;
@@ -39,15 +42,15 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
     RecyclerView recycler_itemlist;
     private RecyclerView.LayoutManager layoutManager;
     public static TextView tv_total;
-    public static int total=0;
+
     String jsonCartList;
     private Button btnCheckout;
+    private TextView txtGrandTotal;
     private TextView txtTotal;
-    private TextView txtSubTotal;
     private TextView txtTaxes;
     private DatabaseReference cartListRef;
     Transaction transaction;
-    public Double taxes = 0.0 ,subTotal = 0.0 , grandTotal = 0.0;
+    public Double taxes = 0.0 , total = 0.0 , grandTotal = 0.0;
     private static DecimalFormat roundTotal = new DecimalFormat("0.00");
 
     @Override
@@ -63,21 +66,26 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
             actionBar.setTitle("Shopping Cart");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        txtTotal =(TextView) findViewById(R.id.tv_total);
-        txtSubTotal = (TextView) findViewById(R.id.tv_subtotal);
+        txtGrandTotal =(TextView) findViewById(R.id.tv_grand_total);
+        txtTotal = (TextView) findViewById(R.id.tv_total);
         txtTaxes = (TextView) findViewById(R.id.tv_taxes);
         btnCheckout = (Button) findViewById(R.id.btn_placeorder);
 
         recycler_itemlist =(RecyclerView) findViewById(R.id.recycler_cart);
         recycler_itemlist.setHasFixedSize(true);
+        cartListRef = FirebaseDatabase.getInstance().getReference().child("transaction").child("User View").child("items");
        // recycler_itemlist.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false));
 
         layoutManager = new LinearLayoutManager(this);
         recycler_itemlist.setLayoutManager(layoutManager);
 
      //   this.displaySidebar();
+       // initializeOnClickListener();
+
 
     }
+
+
 
     @Override
     protected void onStart() {
@@ -86,7 +94,7 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
 //        CheckOrderState();
 
 
-        cartListRef = FirebaseDatabase.getInstance().getReference().child("transaction").child("User View").child("items");
+
 
         FirebaseRecyclerOptions<Transaction> options =
                 new FirebaseRecyclerOptions.Builder<Transaction>()
@@ -101,43 +109,156 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
                 transaction_list = transaction;
                 Log.i("Debug", "Transaction Name: " +transaction.getPname());
 
-                cartViewHolder.txtProductName.setText(transaction.getPname());
-                cartViewHolder.txtProductSubTotal.setText("$ " + String.valueOf(transaction.getSubTotal()) );
-                cartViewHolder.txtProductQuantity.setText(String.valueOf(transaction.getTransactionQty()));
+
+                handleClickListeners(cartViewHolder, transaction);
 
 
-                subTotal = subTotal +  transaction.getSubTotal();
-/*
-                cartViewHolder.txtProductName.setText("Name");
-                cartViewHolder.txtProductSubTotal.setText("0.0" + " $");
-                cartViewHolder.txtProductQuantity.setText("0 units");*/
-                taxes = subTotal* 0.0975;
-                taxes = Double.valueOf(roundTotal.format(taxes));
-                grandTotal = subTotal + taxes;
-                txtSubTotal.setText(String.valueOf(subTotal));
-                txtTaxes.setText(String.valueOf(taxes));
-                txtTotal.setText(String.valueOf(grandTotal));
+                setItemsCardView(cartViewHolder, transaction);
 
 
+                getTotals(transaction);
 
             }
             @NonNull
             @Override
             public CartViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_item_cart, parent, false);
-                CartViewHolder  holder = new CartViewHolder(view, transaction_list);
+                CartViewHolder  holder = new CartViewHolder(view);
                 return  holder;
             }
         };
 
 
-
-
-
-
-
         recycler_itemlist.setAdapter(adapter);
         adapter.startListening();
+    }
+
+    private void setItemsCardView(CartViewHolder cardView, Transaction transaction) {
+        cardView.txtProductName.setText(transaction.getPname());
+        cardView.txtProductSubTotal.setText("$ " + String.valueOf(transaction.getSubTotal()) );
+        cardView.txtProductQuantity.setText(String.valueOf(transaction.getTransactionQty()));
+    }
+
+    private void getTotals(Transaction t) {
+
+        total = total +  t.getSubTotal();
+
+        taxes = total * 0.0975;
+        taxes = Double.valueOf(roundTotal.format(taxes));
+        grandTotal = total + taxes;
+        txtTotal.setText(String.valueOf(total));
+        txtTaxes.setText(String.valueOf(taxes));
+        txtGrandTotal.setText(String.valueOf(grandTotal));
+
+
+    }
+
+    private void handleClickListeners(final CartViewHolder cartViewHolder, final Transaction t) {
+
+        //button to add products to database
+        cartViewHolder.btnAddProductQty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Log.i("Debug!!", "Yesss" + String.valueOf(t.getItemID()) );
+                cartListRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()){
+                            if(t.getTransactionQty() >0) {
+                                Long qty = t.getTransactionQty();
+                                qty++;
+                                t.setTransactionQty(qty);
+
+                                //update cart information
+//                            cartViewHolder.txtProductQuantity.setText(String.valueOf(t.getTransactionQty()));
+                                Long subtotal = t.getSubTotal() * qty;
+                                t.setSubTotal(subtotal);
+//                            cartViewHolder.txtProductSubTotal.setText(String.valueOf(t.getSubTotal()));
+                                setItemsCardView(cartViewHolder, t);
+                                getTotals(t);
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+        });
+
+        cartViewHolder.btnDeleteProductQty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        cartViewHolder.btnSubtractProductQty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Log.i("Debug!!", "Yesss" + String.valueOf(t.getItemID()) );
+                cartListRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()){
+                            if(t.getTransactionQty() >0) {
+                                Long qty = t.getTransactionQty();
+                                qty--;
+                                t.setTransactionQty(qty);
+
+                                //update cart information
+//                            cartViewHolder.txtProductQuantity.setText(String.valueOf(t.getTransactionQty()));
+                                Long subtotal = t.getSubTotal() * qty;
+                                t.setSubTotal(subtotal);
+//                            cartViewHolder.txtProductSubTotal.setText(String.valueOf(t.getSubTotal()));
+                                setItemsCardView(cartViewHolder, t);
+                                getTotals(t);
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+                 /*Log.i("Debug" ,"Subtract Product!!!");
+                        cartListRef.child("transaction")
+                                .child(String.valueOf(transaction.getItemID()))
+                                .removeValue()
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful()){
+                                            //item removed
+
+                                        }
+                                    }
+                                });*/
+
+            }
+        });
+
+
+    }
+
+    public void subtractQty(){
+
+    }
+    public Long addQty(long transactionQty){
+        transactionQty++;
+        return transactionQty;
+    }
+    public void deleteItem(){
+
     }
 
     @Override
@@ -153,6 +274,7 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
     private void getIntentData(){
         if(getIntent()!=null && getIntent().getExtras()!=null){

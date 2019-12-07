@@ -42,7 +42,7 @@
     </TextView>
 
     <TextView
-        android:id="@+id/tv_subtotal"
+        android:id="@+id/tv_total"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1.3"
@@ -102,7 +102,7 @@
         </TextView>
 
         <TextView
-            android:id="@+id/tv_total"
+            android:id="@+id/tv_grand_total"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1.3"
