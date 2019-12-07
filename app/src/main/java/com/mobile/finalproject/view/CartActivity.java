@@ -46,6 +46,7 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
 
     String jsonCartList;
     private Button btnCheckout;
+
     private TextView txtGrandTotal;
     private TextView txtTotal;
     private TextView txtTaxes;
@@ -72,10 +73,13 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
         txtTaxes = (TextView) findViewById(R.id.tv_taxes);
         btnCheckout = (Button) findViewById(R.id.btn_placeorder);
 
+
         recycler_itemlist =(RecyclerView) findViewById(R.id.recycler_cart);
         recycler_itemlist.setHasFixedSize(true);
         cartListRef = FirebaseDatabase.getInstance().getReference().child("transaction").child("User View").child("items");
        // recycler_itemlist.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false));
+
+
 
         layoutManager = new LinearLayoutManager(this);
         recycler_itemlist.setLayoutManager(layoutManager);

@@ -2,12 +2,16 @@ package com.mobile.finalproject;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,14 +27,20 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.mobile.finalproject.model.Products;
 import com.mobile.finalproject.view.CartActivity;
 import com.mobile.finalproject.view.LoginActivity;
 import com.mobile.finalproject.view.SettingsActivity;
 import com.mobile.finalproject.viewHolder.ProductViewHolder;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.paperdb.Paper;
@@ -48,6 +58,9 @@ public class HomeActivity extends AppCompatActivity
     private DatabaseReference ProductsRef;
     private RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
+    private ImageButton mSearchbtn;
+    private EditText mSearchField;
+    ArrayList<Products> arrayList;
 
     public static final String ITEM_ID = "id";
     @Override
@@ -55,7 +68,9 @@ public class HomeActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-
+        arrayList = new ArrayList<>();
+        mSearchField = (EditText) findViewById(R.id.search_field);
+        mSearchbtn = (ImageButton)findViewById(R.id.search_btn);
         ProductsRef = FirebaseDatabase.getInstance().getReference().child("items");
 
 
@@ -99,13 +114,127 @@ public class HomeActivity extends AppCompatActivity
         userNameTextView.setText(Prevalent.currentOnlineUser.getName());
         Picasso.get().load(Prevalent.currentOnlineUser.getFileLocation()).placeholder(R.drawable.profile).into(profileImageView);
 */
-
-
+      changeText(mSearchField);
+        mSearchbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String searchText = mSearchField.getText().toString();
+               // firebaseSearch(searchText);
+            }
+        });
         recyclerView = findViewById(R.id.recycler_menu);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
     }
+
+    private void changeText(EditText mSearchField) {
+
+        mSearchField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!s.toString().isEmpty()){
+                    search(s.toString());
+                }
+                else{
+                    search("");
+                }
+            }
+        });
+
+    }
+
+    private void search(String searchText) {
+
+        Query query = ProductsRef.orderByChild("name").startAt(searchText).endAt(searchText + "\uf8ff");
+
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChildren()){
+                    arrayList.clear();
+                    for(DataSnapshot dss: dataSnapshot.getChildren()){
+                        final Products products = dss.getValue(Products.class);
+                        arrayList.add(products);
+                    }
+
+                    ProductSearchAdapter productSearchAdapter = new ProductSearchAdapter(getApplicationContext(), arrayList);
+
+                    recyclerView.setAdapter(productSearchAdapter);
+                    productSearchAdapter.notifyDataSetChanged();
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+   /* private void firebaseSearch(String searchText) {
+
+//        //options that contains out query
+//        FirebaseRecyclerOptions<Products> firebaseSearchQuery =
+//                new FirebaseRecyclerOptions.Builder<Products>()
+//                        .setQuery(ProductsRef, Products.class).orderByChild("name").startAt(searchText).endAt(searchText + "\uf8ff")
+//                        .build();
+//        FirebaseRecyclerAdapter<Products, ProductViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Products, ProductViewHolder>(
+//               firebaseSearchQuery
+//        ) {
+//
+//            @Override
+//            protected void onBindViewHolder(@NonNull ProductViewHolder productViewHolder, int i, @NonNull Products products) {
+//
+//            }
+//
+//            @NonNull
+//            @Override
+//            public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+//                return null;
+//            }
+//        };
+
+        Toast.makeText(HomeActivity.this, "Started Search", Toast.LENGTH_LONG).show();
+
+        Query firebaseSearchQuery = ProductsRef.orderByChild("name").
+                startAt(searchText).
+                endAt(searchText + "\uf8ff");
+
+        FirebaseRecyclerAdapter<Products, ProductViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Products, ProductViewHolder>(
+
+                Products.class,
+                R.layout.content_home,
+                ProductViewHolder.class,
+                firebaseSearchQuery
+
+        ) {
+            @NonNull
+            @Override
+            public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                return null;
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull ProductViewHolder productViewHolder, int i, @NonNull Products products) {
+                displayData(productViewHolder, products);
+               // productViewHolder.setDetails(getApplicationContext(), model.getName(), model.getStatus(), model.getImage());
+            }
+
+        };
+    }*/
 
 
     @Override
@@ -125,13 +254,9 @@ public class HomeActivity extends AppCompatActivity
                     @Override
                     protected void onBindViewHolder(@NonNull ProductViewHolder holder, int position, @NonNull final Products model)
                     {
-                        //display data
-                        holder.txtProductName.setText(model.getName());
-                        holder.txtProductDescription.setText(model.getDescription());
-                        holder.txtProductPrice.setText("$" + model.getPrice()  + "/day");
-                        Picasso.get().load(model.getFileLocation()).into(holder.imageView);
-                        Log.i("HomeActivity", "Output: " + model.getName() + "  "  + model.getDescription() +
-                                "  " + "Price/hr = " + model.getPrice() + "$");
+
+                        //show data of CardView in RecyclerView
+                        displayData(holder, model);
                         holder.itemView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -155,6 +280,17 @@ public class HomeActivity extends AppCompatActivity
                 };
         recyclerView.setAdapter(adapter);
         adapter.startListening();
+    }
+
+    private void displayData(ProductViewHolder holder, Products model) {
+
+        //display data
+        holder.txtProductName.setText(model.getName());
+        holder.txtProductDescription.setText(model.getDescription());
+        holder.txtProductPrice.setText("$" + model.getPrice()  + "/day");
+        Picasso.get().load(model.getFileLocation()).into(holder.imageView);
+        Log.i("HomeActivity", "Output: " + model.getName() + "  "  + model.getDescription() +
+                "  " + "Price/hr = " + model.getPrice() + "$");
     }
 
     @Override
