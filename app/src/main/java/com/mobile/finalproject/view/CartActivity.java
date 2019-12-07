@@ -148,19 +148,19 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterator<DataSnapshot>items =dataSnapshot.getChildren().iterator();
+                double total =0.0;
                 while (items.hasNext()){
 
                     DataSnapshot item = items.next();
-                    Long total = Long.valueOf(item.child("subTotal").getValue().toString());
-                    taxes = total * 0.0975;
-                    taxes = Double.valueOf(roundTotal.format(taxes));
-                    grandTotal = total + taxes;
-                    txtTotal.setText(String.valueOf(total));
-                    txtTaxes.setText(String.valueOf(taxes));
-                    txtGrandTotal.setText(String.valueOf(grandTotal));
-
+                     total = total + Long.valueOf(item.child("subTotal").getValue().toString());
 
                 }
+                taxes = total * 0.0975;
+                taxes = Double.valueOf(roundTotal.format(taxes));
+                grandTotal = total + taxes;
+                txtTotal.setText(String.valueOf(total));
+                txtTaxes.setText(String.valueOf(taxes));
+                txtGrandTotal.setText(String.valueOf(grandTotal));
 
 
             }
