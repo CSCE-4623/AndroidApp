@@ -1,15 +1,29 @@
 package com.mobile.finalproject.model;
 
+import com.google.firebase.database.Exclude;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class Transaction {
-    private String pname, price;
-    private Long itemID,  transactionQty, subTotal;
+    private String pname;
+    private Long itemID,  transactionQty, subTotal,price;
 
 
 
     public Transaction() {
     }
 
-    public Transaction(Long pid, String pname, String price, Long quantity, Long subTotal) {
+    public Transaction(Long pid, String pname, Long quantity, Long subTotal) {
+        this.itemID = pid;
+        this.pname = pname;
+        this.transactionQty = quantity;
+        this.subTotal = subTotal;
+    }
+
+
+
+    public Transaction(Long pid, String pname, Long price, Long quantity, Long subTotal) {
         this.itemID = pid;
         this.pname = pname;
         this.price = price;
@@ -33,11 +47,11 @@ public class Transaction {
         this.pname = pname;
     }
 
-    public String getPrice() {
+    public Long getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Long price) {
         this.price = price;
     }
 
@@ -58,4 +72,16 @@ public class Transaction {
     }
     public void addQty(){transactionQty++;}
     public void subtractQty(){transactionQty--;}
+
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("pname", pname);
+        result.put("price", price);
+        result.put("itemID", itemID);
+        result.put("transactionQty", transactionQty);
+        result.put("subTotal", subTotal);
+
+        return result;
+    }
 }

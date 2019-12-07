@@ -33,6 +33,7 @@ import com.mobile.finalproject.model.Transaction;
 import com.mobile.finalproject.viewHolder.CartViewHolder;
 
 import java.text.DecimalFormat;
+import java.util.Iterator;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.paperdb.Paper;
@@ -49,7 +50,7 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
     private TextView txtTotal;
     private TextView txtTaxes;
     private DatabaseReference cartListRef;
-    Transaction transaction;
+
     public Double taxes = 0.0 , total = 0.0 , grandTotal = 0.0;
     private static DecimalFormat roundTotal = new DecimalFormat("0.00");
 
@@ -141,14 +142,37 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
 
     private void getTotals(Transaction t) {
 
-        total = total +  t.getSubTotal();
+       // total = total +  t.getSubTotal();
 
-        taxes = total * 0.0975;
-        taxes = Double.valueOf(roundTotal.format(taxes));
-        grandTotal = total + taxes;
-        txtTotal.setText(String.valueOf(total));
-        txtTaxes.setText(String.valueOf(taxes));
-        txtGrandTotal.setText(String.valueOf(grandTotal));
+        cartListRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Iterator<DataSnapshot>items =dataSnapshot.getChildren().iterator();
+                while (items.hasNext()){
+
+                    DataSnapshot item = items.next();
+                    Long total = Long.valueOf(item.child("subTotal").getValue().toString());
+                    taxes = total * 0.0975;
+                    taxes = Double.valueOf(roundTotal.format(taxes));
+                    grandTotal = total + taxes;
+                    txtTotal.setText(String.valueOf(total));
+                    txtTaxes.setText(String.valueOf(taxes));
+                    txtGrandTotal.setText(String.valueOf(grandTotal));
+
+
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+
+        });
+
+
 
 
     }
@@ -160,23 +184,24 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
 
-                Log.i("Debug!!", "Yesss" + String.valueOf(t.getItemID()) );
-                cartListRef.addValueEventListener(new ValueEventListener() {
+                cartListRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if(dataSnapshot.exists()){
                             if(t.getTransactionQty() >0) {
                                 Long qty = t.getTransactionQty();
                                 qty++;
-                                t.setTransactionQty(qty);
-
+//                                t.setTransactionQty(qty);
                                 //update cart information
 //                            cartViewHolder.txtProductQuantity.setText(String.valueOf(t.getTransactionQty()));
-                                Long subtotal = t.getSubTotal() * qty;
-                                t.setSubTotal(subtotal);
+                                Long subtotal = t.getPrice() * qty;
+
 //                            cartViewHolder.txtProductSubTotal.setText(String.valueOf(t.getSubTotal()));
-                                setItemsCardView(cartViewHolder, t);
-                                getTotals(t);
+                              //  setItemsCardView(cartViewHolder, t);
+                                Long itemId = t.getItemID();
+
+                                updateData(dataSnapshot, itemId, qty, subtotal);
+                               // getTotals(t);
                             }
                         }
 
@@ -194,6 +219,19 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
         cartViewHolder.btnDeleteProductQty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                cartListRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Long itemId = t.getItemID();
+                        dataSnapshot.getRef().child(Long.toString(itemId)).removeValue();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
 
             }
         });
@@ -203,22 +241,20 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View v) {
 
                 Log.i("Debug!!", "Yesss" + String.valueOf(t.getItemID()) );
-                cartListRef.addValueEventListener(new ValueEventListener() {
+                cartListRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if(dataSnapshot.exists()){
                             if(t.getTransactionQty() >0) {
                                 Long qty = t.getTransactionQty();
                                 qty--;
-                                t.setTransactionQty(qty);
 
-                                //update cart information
-//                            cartViewHolder.txtProductQuantity.setText(String.valueOf(t.getTransactionQty()));
-                                Long subtotal = t.getSubTotal() * qty;
-                                t.setSubTotal(subtotal);
-//                            cartViewHolder.txtProductSubTotal.setText(String.valueOf(t.getSubTotal()));
+                                Long subtotal = t.getPrice() * qty;
+                                Long itemId = t.getItemID();
+                                updateData(dataSnapshot, itemId, qty, subtotal);
+
                                 setItemsCardView(cartViewHolder, t);
-                                getTotals(t);
+                           //     getTotals(t);
                             }
                         }
 
@@ -250,6 +286,12 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    private void updateData(DataSnapshot dataSnapshot, Long itemId, Long qty, Long subtotal) {
+
+        dataSnapshot.getRef().child(Long.toString(itemId)).child("transactionQty").setValue(qty);
+        dataSnapshot.getRef().child(Long.toString(itemId)).child("subTotal").setValue(subtotal);
+    }
+
     public void subtractQty(){
 
     }
@@ -276,64 +318,6 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    private void getIntentData(){
-        if(getIntent()!=null && getIntent().getExtras()!=null){
-            // Get the Required Parameters for sending Order to server..
-        }
-    }
-
-   /* public static void calculateTotal(){
-        int i=0;
-        total=0;
-        while(i<ItemListAdapter.selecteditems.size()){
-            total=total + ( Integer.valueOf(ItemListAdapter.selecteditems.get(i).getRate()) * Integer.valueOf(ItemListAdapter.selecteditems.get(i).getQuantity()) );
-            i++;
-        }
-        tv_total.setText(""+total);
-    }
-
-    public void insertOrder(View view){
-
-        if(total>0){
-
-            Gson gson = new Gson();
-            jsonCartList = gson.toJson(ItemListAdapter.selecteditems);
-
-            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    switch (which){
-                        case DialogInterface.BUTTON_POSITIVE:
-                            //Yes button clicked
-                            placeOrderRequest();
-                            break;
-
-                        case DialogInterface.BUTTON_NEGATIVE:
-                            //No button clicked
-                            break;
-                    }
-                }
-            };
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(CartActivity.this);
-            builder.setMessage("Do you want to place Order ?").setPositiveButton("Yes", dialogClickListener)
-                    .setNegativeButton("No", dialogClickListener).show();
-
-        }else{
-            Toast.makeText(CartActivity.this,"No items in Cart !",Toast.LENGTH_LONG).show();
-        }
-
-
-    }
-*/
-
-    private void placeOrderRequest(){
-        //Send Request to Server with required Parameters
-    /*
-   jsonCartList - Consists of Objects of all product selected.
-    */
-
-    }
 
     public void displaySidebar(){
         View v = getLayoutInflater().inflate(R.layout.activity_cart,null);
@@ -402,5 +386,15 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
     public void insertOrder(View view){
         Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
+    }
+    public void updateValue(Long itemId, String pname, Long qty, Long subTotal ){
+        Log.i("Debug", "item clicked  and qty is  " +  qty);
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().
+                getReference("transaction").child("User View").child("items").child(Long.toString(itemId));
+
+        Transaction tran = new Transaction(itemId,pname,qty,subTotal);
+        databaseReference.setValue(tran);
+
     }
 }
