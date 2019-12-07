@@ -27,6 +27,11 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductViewHolder
 
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
     @NonNull
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
