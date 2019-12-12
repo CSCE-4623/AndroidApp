@@ -37,7 +37,10 @@
         android:layout_marginTop="50dp"
         android:layout_marginBottom="-65dp"
         android:fontFamily="sans-serif-smallcaps"
-        android:text="@string/register" />
+        android:text="@string/register"
+        app:backgroundTint="@android:color/holo_red_dark"
+        android:textColor="@color/colorText"
+        />
 
     <ProgressBar
         android:visibility="gone"
