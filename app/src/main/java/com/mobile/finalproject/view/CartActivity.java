@@ -112,7 +112,7 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
             @Override
             protected void onBindViewHolder(@NonNull CartViewHolder cartViewHolder, int i, @NonNull Transaction transaction) {
                 transaction_list = transaction;
-                Log.i("Debug", "Transaction Name: " +transaction.getPname());
+                Log.i("Debug", "Transaction Name: " +transaction.getName());
 
 
                 handleClickListeners(cartViewHolder, transaction);
@@ -139,9 +139,11 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setItemsCardView(CartViewHolder cardView, Transaction transaction) {
-        cardView.txtProductName.setText(transaction.getPname());
-        cardView.txtProductSubTotal.setText("$ " + String.valueOf(transaction.getSubTotal()) );
-        cardView.txtProductQuantity.setText(String.valueOf(transaction.getTransactionQty()));
+
+        long subTotal  = transaction.getPrice() * transaction.getQuantity();
+        cardView.txtProductName.setText(transaction.getName());
+        cardView.txtProductSubTotal.setText("$ " + String.valueOf(subTotal ));
+        cardView.txtProductQuantity.setText(String.valueOf(transaction.getQuantity()));
     }
 
     private void getTotals(Transaction t) {
@@ -153,10 +155,16 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterator<DataSnapshot>items =dataSnapshot.getChildren().iterator();
                 double total =0.0;
+                double qty, price = 0.0;
+
                 while (items.hasNext()){
 
                     DataSnapshot item = items.next();
-                     total = total + Long.valueOf(item.child("subTotal").getValue().toString());
+                 //    total = total + Long.valueOf(item.child("subTotal").getValue().toString());
+
+                     qty  = Long.valueOf(item.child("quantity").getValue().toString());
+                     price = Long.valueOf(item.child("price").getValue().toString());
+                     total = total + (qty * price);
 
                 }
                 taxes = total * 0.0975;
@@ -192,17 +200,17 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if(dataSnapshot.exists()){
-                            if(t.getTransactionQty() >0) {
-                                Long qty = t.getTransactionQty();
+                            if(t.getQuantity() >0) {
+                                Long qty = t.getQuantity();
                                 qty++;
-//                                t.setTransactionQty(qty);
+//                                t.setQuantity(qty);
                                 //update cart information
-//                            cartViewHolder.txtProductQuantity.setText(String.valueOf(t.getTransactionQty()));
+//                            cartViewHolder.txtProductQuantity.setText(String.valueOf(t.getQuantity()));
                                 Long subtotal = t.getPrice() * qty;
 
 //                            cartViewHolder.txtProductSubTotal.setText(String.valueOf(t.getSubTotal()));
                               //  setItemsCardView(cartViewHolder, t);
-                                Long itemId = t.getItemID();
+                                String itemId = t.getId();
 
                                 updateData(dataSnapshot, itemId, qty, subtotal);
                                // getTotals(t);
@@ -226,8 +234,8 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
                 cartListRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Long itemId = t.getItemID();
-                        dataSnapshot.getRef().child(Long.toString(itemId)).removeValue();
+                        String itemId = t.getId();
+                        dataSnapshot.getRef().child(itemId).removeValue();
                     }
 
                     @Override
@@ -244,17 +252,17 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
 
-                Log.i("Debug!!", "Yesss" + String.valueOf(t.getItemID()) );
+                Log.i("Debug!!", "Yesss" + String.valueOf(t.getId()) );
                 cartListRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if(dataSnapshot.exists()){
-                            if(t.getTransactionQty() >0) {
-                                Long qty = t.getTransactionQty();
+                            if(t.getQuantity() >0) {
+                                Long qty = t.getQuantity();
                                 qty--;
 
                                 Long subtotal = t.getPrice() * qty;
-                                Long itemId = t.getItemID();
+                                String itemId = t.getId();
                                 updateData(dataSnapshot, itemId, qty, subtotal);
 
                                 setItemsCardView(cartViewHolder, t);
@@ -272,7 +280,7 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
 
                  /*Log.i("Debug" ,"Subtract Product!!!");
                         cartListRef.child("transaction")
-                                .child(String.valueOf(transaction.getItemID()))
+                                .child(String.valueOf(transaction.getId()))
                                 .removeValue()
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
@@ -290,10 +298,10 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    private void updateData(DataSnapshot dataSnapshot, Long itemId, Long qty, Long subtotal) {
+    private void updateData(DataSnapshot dataSnapshot, String itemId, Long qty, Long subtotal) {
 
-        dataSnapshot.getRef().child(Long.toString(itemId)).child("transactionQty").setValue(qty);
-        dataSnapshot.getRef().child(Long.toString(itemId)).child("subTotal").setValue(subtotal);
+        dataSnapshot.getRef().child(itemId).child("quantity").setValue(qty);
+      //  dataSnapshot.getRef().child(Long.toString(itemId)).child("subTotal").setValue(subtotal);
     }
 
     public void subtractQty(){
@@ -391,11 +399,11 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
         Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
     }
-    public void updateValue(Long itemId, String pname, Long qty, Long subTotal ){
+    public void updateValue(String itemId, String pname, Long qty, Long subTotal ){
         Log.i("Debug", "item clicked  and qty is  " +  qty);
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().
-                getReference("transaction").child("User View").child("items").child(Long.toString(itemId));
+                getReference("transaction").child("User View").child("items").child(itemId);
 
         Transaction tran = new Transaction(itemId,pname,qty,subTotal);
         databaseReference.setValue(tran);

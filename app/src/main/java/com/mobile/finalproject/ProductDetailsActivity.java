@@ -1,16 +1,15 @@
 package com.mobile.finalproject;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,8 +20,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.mobile.finalproject.Prevalent.Prevalent;
-import com.mobile.finalproject.R;
 import com.mobile.finalproject.model.Products;
 import com.mobile.finalproject.view.CartActivity;
 import com.squareup.picasso.Picasso;
@@ -85,9 +82,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
         final HashMap<String, Object> cartMap = new HashMap<>();
         cartMap.put("id",productID);
         cartMap.put("name",productName.getText().toString());
-        cartMap.put("price",productPrice.getText().toString());
+        cartMap.put("price",Long.valueOf (productPrice.getText().toString()));
         cartMap.put("description",productDescription.getText().toString());
-        cartMap.put("quantity",numberButton.getNumber());
+        cartMap.put("quantity",Long.valueOf(numberButton.getNumber()));
         cartMap.put("date",saveCurrentDate);
         cartMap.put("time",saveCurrentTime);
 
@@ -124,7 +121,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 {
                     Products products = dataSnapshot.getValue(Products.class);
                     productName.setText(products.getName());
-                    productPrice.setText("$" + String.valueOf(products.getPrice()));
+                    productPrice.setText(String.valueOf(products.getPrice()));
                     productDescription.setText(products.getDescription());
                     Picasso.get().load(products.getFileLocation()).into(productImage);
                 }
